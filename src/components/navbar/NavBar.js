@@ -1,6 +1,6 @@
-import React from 'react';
-import AppBar from 'material-ui/AppBar';
+import React from "react";
+import AppBar from "material-ui/AppBar";
 
-const NavBar = () => <AppBar title="Pixabay finder" />
+const NavBar = () => <AppBar title="Pixabay finder" />;
 
 export default NavBar;

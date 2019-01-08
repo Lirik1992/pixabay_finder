@@ -1,27 +1,34 @@
-import React, { Component } from 'react';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import ImageResults from '../image-results/ImageResults';
-import axios from 'axios';
+import React, { Component } from "react";
+import TextField from "material-ui/TextField";
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
+import ImageResults from "../image-results/ImageResults";
+import axios from "axios";
 
 class Search extends Component {
-
   state = {
-    searchText: '',
+    searchText: "",
     amount: 15,
-    apiUrl: 'https://pixabay.com/api',
-    apiKey: '11216963-fc29796eb90610f1ae1686a35',
+    apiUrl: "https://pixabay.com/api",
+    apiKey: "11216963-fc29796eb90610f1ae1686a35",
     images: []
-  }
+  };
 
-  onTextChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value },
-      () => {
-        axios.get(`${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.searchText}&image_type=photo&per_page=${this.state.amount}&safe_search=true`)
+  onTextChange = e => {
+    const val = e.target.value;
+    this.setState({ [e.target.name]: val }, () => {
+      if (val === "") {
+        this.setState({ images: [] });
+      } else {
+        axios
+          .get(
+            `${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.searchText}
+            &image_type=photo&per_page=${this.state.amount}&safe_search=true`
+          )
           .then(res => this.setState({ images: res.data.hits }))
           .catch(err => console.log(err));
-      })
+      }
+    });
   };
 
   onAmountChange = (e, index, value) => this.setState({ amount: value });
@@ -32,7 +39,7 @@ class Search extends Component {
 
     return (
       <div>
-        <TextField 
+        <TextField
           name="searchText"
           value={searchText}
           onChange={this.onTextChange}
@@ -40,7 +47,7 @@ class Search extends Component {
           fullWidth={true}
         />
         <br />
-        <SelectField 
+        <SelectField
           name="amount"
           value={amount}
           onChange={this.onAmountChange}
@@ -53,9 +60,9 @@ class Search extends Component {
           <MenuItem value={50} primaryText="50" />
         </SelectField>
         <br />
-        {images.length > 0 ? (<ImageResults images={images} />) : null}
+        {images.length > 0 ? <ImageResults images={images} /> : null}
       </div>
-    )
+    );
   }
 }
 
